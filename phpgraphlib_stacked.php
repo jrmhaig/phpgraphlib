@@ -134,7 +134,7 @@ class PHPGraphLibStacked extends PHPGraphLib
 					imagestring($this->image, 2, $dataX, $dataY, $item,  $this->data_value_color);
 				}
 
-				$this->write_x_axis_value($key, $data_set_num, $xStart);
+				$this->writeXAxisValue($key, $data_set_num, $xStart);
 
 				$xStart += $this->bar_width + $this->space_width;
 				$last_y1[$data_set_num][$key] = $y1;

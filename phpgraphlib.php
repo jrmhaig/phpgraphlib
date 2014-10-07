@@ -455,7 +455,7 @@ class PHPGraphLib {
 					imagestring($this->image, 2, $dataX, $dataY, $item,  $this->data_value_color);
 				}
 
-				$this->write_x_axis_value($key, $data_set_num, $xStart);
+				$this->writeXAxisValue($key, $data_set_num, $xStart);
 
 				$xStart += $this->bar_width + $this->space_width;
 			}
@@ -1551,7 +1551,7 @@ class PHPGraphLib {
 	}
 
 	//write x axis value
-	protected function write_x_axis_value($key, $data_set_num, $xStart)
+	protected function writeXAxisValue($key, $data_set_num, $xStart)
 	{
 		if ($this->bool_x_axis_values) {
 			if ($data_set_num == $this->data_set_count - 1) {
