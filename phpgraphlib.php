@@ -454,60 +454,9 @@ class PHPGraphLib {
 					$dataX -= ($this->data_additional_length * self::DATA_VALUE_TEXT_WIDTH) / 2;
 					imagestring($this->image, 2, $dataX, $dataY, $item,  $this->data_value_color);
 				}
-				//write x axis value 
-				if ($this->bool_x_axis_values) {
-					if ($data_set_num == $this->data_set_count - 1) {
-						if ($this->bool_x_axis_values_vert) {
-							if ($this->bool_all_negative) {
-								//we must put values above 0 line
-								$textVertPos = round($this->y_axis_y2 - self::AXIS_VALUE_PADDING);
-							} else {
-								//mix of both pos and neg numbers
-								//write value y axis bottom value (will be under bottom of grid even if x axis is floating due to
-								$textVertPos = round($this->y_axis_y1 + (strlen($key) * self::TEXT_WIDTH) + self::AXIS_VALUE_PADDING);
-							}
-							$textHorizPos = round($xStart + ($this->bar_width / 2) - (self::TEXT_HEIGHT / 2));
-					
-							//skip and dispplay every x intervals
-							if ($this->x_axis_value_interval) {
-								if ($this->x_axis_value_interval_counter < $this->x_axis_value_interval) {
-									$this->x_axis_value_interval_counter++;
-								} else {
-									imagestringup($this->image, 2, $textHorizPos, $textVertPos, $key,  $this->x_axis_text_color);
-									$this->x_axis_value_interval_counter = 0;
-								}
-							}
-							else {
-								imagestringup($this->image, 2, $textHorizPos, $textVertPos, $key,  $this->x_axis_text_color);
-							}
-						}
-						else {
-							if ($this->bool_all_negative) {
-								//we must put values above 0 line
-								$textVertPos = round($this->y_axis_y2 - self::TEXT_HEIGHT - self::AXIS_VALUE_PADDING);
-							} else {
-								//mix of both pos and neg numbers
-								//write value y axis bottom value (will be under bottom of grid even if x axis is floating due to
-								$textVertPos = round($this->y_axis_y1 + (self::TEXT_HEIGHT * 2 / 3) - self::AXIS_VALUE_PADDING);
-							}
-							//horizontal data keys
-							$textHorizPos = round($xStart + ($this->bar_width / 2) - ((strlen($key) * self::TEXT_WIDTH) / 2));
-							
-							
-							//skip and dispplay every x intervals
-							if ($this->x_axis_value_interval) {
-								if ($this->x_axis_value_interval_counter < $this->x_axis_value_interval) {
-									$this->x_axis_value_interval_counter++;
-								} else {
-									imagestring($this->image, 2, $textHorizPos, $textVertPos, $key,  $this->x_axis_text_color);
-									$this->x_axis_value_interval_counter = 0;
-								}
-							} else {
-								imagestring($this->image, 2, $textHorizPos, $textVertPos, $key,  $this->x_axis_text_color);
-							}
-						}
-					}
-				}
+
+				$this->write_x_axis_value($key, $data_set_num, $xStart);
+
 				$xStart += $this->bar_width + $this->space_width;
 			}
 		}
@@ -1599,5 +1548,61 @@ class PHPGraphLib {
 		} else { 
 			$this->error[] = "Boolean arg for setIgnoreDataFitErrors() not specified properly.";
 		}	
+	}
+
+	//write x axis value
+	protected function write_x_axis_value($key, $data_set_num, $xStart)
+	{
+		if ($this->bool_x_axis_values) {
+			if ($data_set_num == $this->data_set_count - 1) {
+				if ($this->bool_x_axis_values_vert) {
+					if ($this->bool_all_negative) {
+						//we must put values above 0 line
+						$textVertPos = round($this->y_axis_y2 - self::AXIS_VALUE_PADDING);
+					} else {
+						//mix of both pos and neg numbers
+						//write value y axis bottom value (will be under bottom of grid even if x axis is floating due to
+						$textVertPos = round($this->y_axis_y1 + (strlen($key) * self::TEXT_WIDTH) + self::AXIS_VALUE_PADDING);
+					}
+					$textHorizPos = round($xStart + ($this->bar_width / 2) - (self::TEXT_HEIGHT / 2));
+
+					//skip and dispplay every x intervals
+					if ($this->x_axis_value_interval) {
+						if ($this->x_axis_value_interval_counter < $this->x_axis_value_interval) {
+							$this->x_axis_value_interval_counter++;
+						} else {
+							imagestringup($this->image, 2, $textHorizPos, $textVertPos, $key,  $this->x_axis_text_color);
+							$this->x_axis_value_interval_counter = 0;
+						}
+					}
+					else {
+						imagestringup($this->image, 2, $textHorizPos, $textVertPos, $key,  $this->x_axis_text_color);
+					}
+				}
+				else {
+					if ($this->bool_all_negative) {
+						//we must put values above 0 line
+						$textVertPos = round($this->y_axis_y2 - self::TEXT_HEIGHT - self::AXIS_VALUE_PADDING);
+					} else {
+						//mix of both pos and neg numbers
+						//write value y axis bottom value (will be under bottom of grid even if x axis is floating due to
+						$textVertPos = round($this->y_axis_y1 + (self::TEXT_HEIGHT * 2 / 3) - self::AXIS_VALUE_PADDING);
+					}
+					//horizontal data keys
+					$textHorizPos = round($xStart + ($this->bar_width / 2) - ((strlen($key) * self::TEXT_WIDTH) / 2));
+					//skip and dispplay every x intervals
+					if ($this->x_axis_value_interval) {
+						if ($this->x_axis_value_interval_counter < $this->x_axis_value_interval) {
+							$this->x_axis_value_interval_counter++;
+						} else {
+							imagestring($this->image, 2, $textHorizPos, $textVertPos, $key,  $this->x_axis_text_color);
+							$this->x_axis_value_interval_counter = 0;
+						}
+					} else {
+						imagestring($this->image, 2, $textHorizPos, $textVertPos, $key,  $this->x_axis_text_color);
+					}
+				}
+			}
+		}
 	}
 }
