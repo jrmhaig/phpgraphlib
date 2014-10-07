@@ -147,6 +147,7 @@ class PHPGraphLib {
 	//bar vars / scale
 	protected $bar_width;
 	protected $space_width;
+	protected $bar_space_ratio = 0.5; // Default 2:1 ratio
 	protected $unit_scale;
 	protected $goal_line_array = array();
 	protected $horiz_grid_lines = array();
@@ -280,16 +281,19 @@ class PHPGraphLib {
 
 	protected function setupData()
 	{
-		$unit_width = ($this->width - $this->y_axis_margin - $this->right_margin) / (($this->data_count * 2) + $this->data_count);
+		// One 'unit' is the width of one bar together with one space
+		$unit_width = ($this->width - $this->y_axis_margin - $this->right_margin)
+											/ $this->data_count;
 		if ($unit_width < 1 && !$this->bool_ignore_data_fit_errors) {	
 			//error units too small, too many data points or not large enough graph
 			$this->bool_bars_generate = false;
 			$this->error[] = "Graph too small or too many data points.";
 		} else {
-			//default space between bars is 1/2 the width of the bar
-			//find bar and space widths. bar = 2 units, space = 1 unit
-			$this->bar_width = 2 * $unit_width;
-			$this->space_width = $unit_width;
+			// Calculate the width of bars and spaces based on the required ratio
+			$this->bar_width = $unit_width
+															/ ( 1 + $this->bar_space_ratio );
+			$this->space_width = $unit_width * $this->bar_space_ratio
+															/ ( 1 + $this->bar_space_ratio );
 			//now calculate height (scale) units
 			$availVertSpace = $this->height - $this->x_axis_margin - $this->top_margin;	
 			if ($availVertSpace < 1) {
@@ -1096,6 +1100,15 @@ class PHPGraphLib {
 			$this->bool_bar_outline = $bool;
 		} else {
 			$this->error[] = "Boolean arg for setBarOutline() not specified properly.";
+		}
+	}
+
+	public function setBarSpaceRatio($ratio)
+	{
+		if ((is_float($ratio) || is_int($ratio)) && $ratio >= 0) {
+			$this->bar_space_ratio = $ratio;
+		} else {
+			$this->error[] = "Value arg for setBarSpaceRatio() not specified properly.";
 		}
 	}
 
